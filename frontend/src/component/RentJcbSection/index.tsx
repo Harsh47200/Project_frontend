@@ -1,27 +1,40 @@
 import React, { useState, useEffect } from "react";
 import {
-  Truck,
-  Clock,
-  MapPin,
-  Phone,
   Star,
   Calendar,
   IndianRupee,
-  Settings,
-  Shield,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import scss from "./RentJcbSection.module.scss";
 import Swal from "sweetalert2";
+import { Image } from "@chakra-ui/react";
+
+// Define proper types
+interface FormData {
+  name: string;
+  email: string;
+  mobile: string;
+  state: string;
+  district: string;
+  village: string;
+  rentTime: string;
+  equipmentType: string;
+}
+
+interface RentOption {
+  value: string;
+  label: string;
+  rate: number;
+}
 
 const JCBRentSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
-    email: "", // NEW
+    email: "",
     mobile: "",
     state: "",
     district: "",
@@ -41,7 +54,7 @@ const JCBRentSection = () => {
     "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1600&h=900&fit=crop",
   ];
 
-  const rentTimeOptions = [
+  const rentTimeOptions: RentOption[] = [
     { value: "1hour", label: "1 Hour", rate: 1100 },
     { value: "2hours", label: "2 Hours", rate: 2200 },
     { value: "halfday", label: "Half Day", rate: 5500 },
@@ -50,7 +63,7 @@ const JCBRentSection = () => {
     { value: "moreyear", label: "More than 1 Year", rate: 2920000 },
   ];
 
-  const breakerRentOptions = [
+  const breakerRentOptions: RentOption[] = [
     { value: "1hour", label: "1 Hour", rate: 1400 },
     { value: "2hours", label: "2 Hours", rate: 2800 },
     { value: "halfday", label: "Half Day", rate: 7000 },
@@ -60,11 +73,34 @@ const JCBRentSection = () => {
   ];
 
   const indianStates = [
-    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa",
-    "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala",
-    "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland",
-    "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
-    "Uttar Pradesh", "Uttarakhand", "West Bengal"
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
   ];
 
   useEffect(() => {
@@ -74,14 +110,18 @@ const JCBRentSection = () => {
     return () => clearInterval(interval);
   }, [jcbImages.length]);
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const calculateRate = () => {
     const options =
       formData.equipmentType === "JCB" ? rentTimeOptions : breakerRentOptions;
-    const selected = options.find((option) => option.value === formData.rentTime);
+    const selected = options.find(
+      (option) => option.value === formData.rentTime
+    );
     return selected ? selected.rate : 0;
   };
 
@@ -136,7 +176,7 @@ const JCBRentSection = () => {
     return true;
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
 
@@ -144,18 +184,22 @@ const JCBRentSection = () => {
     try {
       const payload = { ...formData, rate: calculateRate() };
 
-      // Hitting Spring Boot directly (CORS already allowed for http://localhost:3000)
-      const response = await fetch("http://localhost:8080/api/contact/rent-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const response = await fetch(
+        "http://localhost:8080/api/contact/rent-request",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const data = await response.json();
       if (response.ok && data.status === "success") {
         Swal.fire({
           title: "✅ Request Submitted!",
-          text: data.message || "Your request has been submitted successfully! We’ll contact you immediately.",
+          text:
+            data.message ||
+            "Your request has been submitted successfully! We'll contact you immediately.",
           icon: "success",
           confirmButtonText: "OK",
           showClass: {
@@ -176,8 +220,7 @@ const JCBRentSection = () => {
           rentTime: "",
           equipmentType: "JCB",
         });
-      }
-      else {
+      } else {
         Swal.fire({
           title: "Submission Failed",
           text: data.message || "Failed to submit request. Please try again.",
@@ -192,7 +235,8 @@ const JCBRentSection = () => {
           },
         });
       }
-    } catch (err) {
+    } catch (error) {
+      console.error("Submission error:", error);
       Swal.fire({
         title: "Failed!",
         text: "Failed to submit request. Please try again.",
@@ -214,7 +258,9 @@ const JCBRentSection = () => {
   const nextImage = () =>
     setCurrentImageIndex((prev) => (prev + 1) % jcbImages.length);
   const prevImage = () =>
-    setCurrentImageIndex((prev) => (prev - 1 + jcbImages.length) % jcbImages.length);
+    setCurrentImageIndex(
+      (prev) => (prev - 1 + jcbImages.length) % jcbImages.length
+    );
 
   return (
     <section id="rentjcb" className={scss["jcb-rent-section"]}>
@@ -259,7 +305,9 @@ const JCBRentSection = () => {
               <div className={scss["jcb-rent-section__image-overlay"]}>
                 <div className={scss["jcb-rent-section__overlay-content"]}>
                   <div>
-                    <span className={scss["jcb-rent-section__availability-badge"]}>
+                    <span
+                      className={scss["jcb-rent-section__availability-badge"]}
+                    >
                       Available Now
                     </span>
                     <h3 className={scss["jcb-rent-section__equipment-title"]}>
@@ -295,11 +343,12 @@ const JCBRentSection = () => {
               {jcbImages.map((image, index) => (
                 <div
                   key={index}
-                  className={`${scss["jcb-rent-section__thumbnail"]} ${currentImageIndex === index ? scss["active"] : ""
-                    }`}
+                  className={`${scss["jcb-rent-section__thumbnail"]} ${
+                    currentImageIndex === index ? scss["active"] : ""
+                  }`}
                   onClick={() => setCurrentImageIndex(index)}
                 >
-                  <img src={image} alt={`Thumbnail ${index + 1}`} />
+                  <Image src={image} alt={`Thumbnail ${index + 1}`} />
                 </div>
               ))}
             </div>
@@ -317,7 +366,10 @@ const JCBRentSection = () => {
                 <h3>Book Your Equipment</h3>
                 <p>Fill the form to get instant quote</p>
               </div>
-              <form className={scss["jcb-rent-section__form"]} onSubmit={handleSubmit}>
+              <form
+                className={scss["jcb-rent-section__form"]}
+                onSubmit={handleSubmit}
+              >
                 <div className={scss["jcb-rent-section__form-group"]}>
                   <label>Full Name *</label>
                   <input
@@ -373,7 +425,9 @@ const JCBRentSection = () => {
                     >
                       <option value="">Select State</option>
                       {indianStates.map((s) => (
-                        <option key={s} value={s}>{s}</option>
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -408,10 +462,9 @@ const JCBRentSection = () => {
                     onChange={handleInputChange}
                   >
                     <option value="">Select rental duration</option>
-                    {(
-                      formData.equipmentType === "JCB"
-                        ? rentTimeOptions
-                        : breakerRentOptions
+                    {(formData.equipmentType === "JCB"
+                      ? rentTimeOptions
+                      : breakerRentOptions
                     ).map((o) => (
                       <option key={o.value} value={o.value}>
                         {o.label} - ₹{formatCurrency(o.rate)}
@@ -435,7 +488,8 @@ const JCBRentSection = () => {
                   className={scss["jcb-rent-section__submit-btn"]}
                   disabled={submitting}
                 >
-                  <Calendar size={20} /> {submitting ? "Submitting..." : "Book Now"}
+                  <Calendar size={20} />{" "}
+                  {submitting ? "Submitting..." : "Book Now"}
                 </button>
               </form>
             </div>

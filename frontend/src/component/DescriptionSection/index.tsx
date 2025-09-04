@@ -2,6 +2,7 @@ import React from "react";
 import { Shield } from "lucide-react";
 import scss from "./DescriptionSection.module.scss";
 import { clsx } from "@/utils/string";
+import { Image } from "@chakra-ui/react";
 
 const DescriptionSection = () => {
   const features = [
@@ -54,8 +55,8 @@ const DescriptionSection = () => {
             </p>
             <p className={clsx(scss.description__subtitle, scss.fadeIn)}>
               Dear customer, when you join us, you will receive all the services
-              of JCB with great satisfaction. Our goal is to provide the best JCB
-              service without compromising your equipment.
+              of JCB with great satisfaction. Our goal is to provide the best
+              JCB service without compromising your equipment.
             </p>
           </div>
 
@@ -68,7 +69,7 @@ const DescriptionSection = () => {
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 <div className={scss.description__card_image}>
-                  <img src={item.img} alt={item.title} />
+                  <Image src={item.img} alt={item.title} />
                   <div className={scss.description__card_overlay}></div>
                 </div>
                 <h4 className={scss.description__card_title}>{item.title}</h4>
@@ -110,7 +111,7 @@ const DescriptionSection = () => {
 
               {/* Image */}
               <div className={scss.description__service_image}>
-                <img
+                <Image
                   src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=400&fit=crop&auto=format"
                   alt="Mobile Service Unit"
                 />

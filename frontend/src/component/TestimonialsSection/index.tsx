@@ -2,8 +2,16 @@ import React from "react";
 import { Star } from "lucide-react";
 import styles from "./TestimonialsSection.module.scss";
 
+interface Testimonial {
+  name: string;
+  company: string;
+  From: string;
+  rating: number;
+  text: string;
+}
+
 const TestimonialsSection = () => {
-  const testimonials = [
+  const testimonials: Testimonial[] = [
     {
       name: "Promodbhai Patel",
       company: "Umiya Earthmovers",
@@ -14,7 +22,7 @@ const TestimonialsSection = () => {
     {
       name: "Jyantibhai Vanzara",
       company: "Patan Earthmovers",
-      From:"Patan",
+      From: "Patan",
       rating: 5,
       text: "Best welding work in the city. Their hardbasing welding saved our excavator bucket. Highly recommended!",
     },
@@ -53,12 +61,12 @@ const TestimonialsSection = () => {
                   <Star
                     key={i}
                     className={styles["testimonials__star"]}
-                    style={{ "--delay": `${i * 0.1}s` }}
+                    style={{ "--delay": `${i * 0.1}s` } as React.CSSProperties}
                   />
                 ))}
               </div>
               <p className={styles["testimonials__text"]}>
-                "{testimonial.text}"
+                &quot;{testimonial.text}&quot;
               </p>
               <div className={styles["testimonials__author"]}>
                 <div className={styles["testimonials__author_name"]}>
