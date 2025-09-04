@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Star, Calendar, IndianRupee, ChevronLeft, ChevronRight } from "lucide-react";
-import { Box, Image, Button, Input, Select, Text, VStack, HStack, FormControl, FormLabel } from "@chakra-ui/react";
 import Swal from "sweetalert2";
+import scss from "./RentJcbSection.module.scss";
+import { Image } from "@chakra-ui/react";
 
-// Define types
 interface FormData {
   name: string;
   email: string;
@@ -39,8 +39,6 @@ const JCBRentSection = () => {
     "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&h=900&fit=crop",
     "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&h=900&fit=crop",
     "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=1600&h=900&fit=crop",
-    "https://images.unsplash.com/photo-1565198020165-3e9e5ee1b862?w=1600&h=900&fit=crop",
-    "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1600&h=900&fit=crop",
   ];
 
   const rentTimeOptions: RentOption[] = [
@@ -48,17 +46,6 @@ const JCBRentSection = () => {
     { value: "2hours", label: "2 Hours", rate: 2200 },
     { value: "halfday", label: "Half Day", rate: 5500 },
     { value: "fullday", label: "Full Day", rate: 8800 },
-    { value: "1year", label: "1 Year", rate: 2920000 },
-    { value: "moreyear", label: "More than 1 Year", rate: 2920000 },
-  ];
-
-  const breakerRentOptions: RentOption[] = [
-    { value: "1hour", label: "1 Hour", rate: 1400 },
-    { value: "2hours", label: "2 Hours", rate: 2800 },
-    { value: "halfday", label: "Half Day", rate: 7000 },
-    { value: "fullday", label: "Full Day", rate: 11200 },
-    { value: "1year", label: "1 Year", rate: 3720000 },
-    { value: "moreyear", label: "More than 1 Year", rate: 3720000 },
   ];
 
   const indianStates = [
@@ -74,7 +61,7 @@ const JCBRentSection = () => {
       setCurrentImageIndex((prev) => (prev + 1) % jcbImages.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [jcbImages.length]);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -83,8 +70,7 @@ const JCBRentSection = () => {
   const formatCurrency = (value: number) => new Intl.NumberFormat("en-IN").format(value);
 
   const calculateRate = () => {
-    const options = formData.equipmentType === "JCB" ? rentTimeOptions : breakerRentOptions;
-    const selected = options.find((option) => option.value === formData.rentTime);
+    const selected = rentTimeOptions.find((option) => option.value === formData.rentTime);
     return selected ? selected.rate : 0;
   };
 
@@ -138,116 +124,118 @@ const JCBRentSection = () => {
   const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + jcbImages.length) % jcbImages.length);
 
   return (
-    <Box as="section" p={8} bg="gray.50">
-      <VStack spacing={6}>
+    <section className={scss["jcb-rent-section"]}>
+      <div className={scss["jcb-rent-section__container"]}>
         {/* Header */}
-        <Box textAlign="center">
-          <Text fontSize="3xl" fontWeight="bold">JCB & Equipment Rental Services</Text>
-          <Text>Premium heavy machinery rental with professional operators. Construction, excavation & industrial projects made easy.</Text>
-        </Box>
+        <div className={scss["jcb-rent-section__header"]}>
+          <h2 className={scss["jcb-rent-section__title"]}>JCB & Equipment Rental Services</h2>
+          <p className={scss["jcb-rent-section__subtitle"]}>
+            Premium heavy machinery rental with professional operators. Construction, excavation & industrial projects made easy.
+          </p>
+        </div>
 
-        {/* Gallery + Form */}
-        <HStack align="start" spacing={10} w="full" flexWrap="wrap">
-          {/* Image Gallery */}
-          <Box flex="1" maxW="600px">
-            <Box position="relative">
-              <Image alt="" src={jcbImages[currentImageIndex]} borderRadius="md" w="full" h="400px" objectFit="cover" />
-              <Box position="absolute" top="2" left="2" bg="green.500" color="white" px={2} py={1} borderRadius="md">Available Now</Box>
-              <HStack position="absolute" bottom="2" right="2" bg="whiteAlpha.800" borderRadius="md">
-                <Star size={20} fill="gold" />
-                <Text fontWeight="bold">4.8</Text>
-              </HStack>
-              <Button position="absolute" left="2" top="50%" transform="translateY(-50%)" onClick={prevImage} size="sm"><ChevronLeft /></Button>
-              <Button position="absolute" right="2" top="50%" transform="translateY(-50%)" onClick={nextImage} size="sm"><ChevronRight /></Button>
-            </Box>
-
-            <HStack mt={2} spacing={2} overflowX="auto">
+        {/* Content Grid */}
+        <div className={scss["jcb-rent-section__content-grid"]}>
+          {/* Gallery */}
+          <div className={scss["jcb-rent-section__gallery"]}>
+            <div className={scss["jcb-rent-section__main-image-container"]}>
+              <Image className={scss["jcb-rent-section__main-image"]} src={jcbImages[currentImageIndex]} alt="JCB Equipment" />
+              <div className={scss["jcb-rent-section__image-overlay"]}>
+                <div className={scss["jcb-rent-section__overlay-content"]}>
+                  <span className={scss["jcb-rent-section__availability-badge"]}>Available Now</span>
+                  <div className={scss["jcb-rent-section__rating"]}>
+                    <Star size={18} />
+                    4.8
+                  </div>
+                </div>
+              </div>
+              <div className={`${scss["jcb-rent-section__nav-arrow"]} ${scss["jcb-rent-section__nav-arrow--left"]}`} onClick={prevImage}><ChevronLeft /></div>
+              <div className={`${scss["jcb-rent-section__nav-arrow"]} ${scss["jcb-rent-section__nav-arrow--right"]}`} onClick={nextImage}><ChevronRight /></div>
+            </div>
+            <div className={scss["jcb-rent-section__thumbnails"]}>
               {jcbImages.map((img, idx) => (
-                <Image
-                  alt=""
+                <div
                   key={idx}
-                  src={img}
-                  w="20"
-                  h="20"
-                  objectFit="cover"
-                  border={currentImageIndex === idx ? "2px solid" : "none"}
-                  borderColor="orange.400"
-                  borderRadius="md"
-                  cursor="pointer"
+                  className={`${scss["jcb-rent-section__thumbnail"]} ${currentImageIndex === idx ? scss.active : ""}`}
                   onClick={() => setCurrentImageIndex(idx)}
-                />
+                >
+                  <Image src={img} alt="" />
+                </div>
               ))}
-            </HStack>
-          </Box>
+            </div>
+          </div>
 
-          {/* Rental Form */}
-          <Box flex="1" maxW="400px" bg="white" p={6} borderRadius="md" boxShadow="md">
-            <Text fontSize="xl" fontWeight="bold" mb={4}>Book Your Equipment</Text>
-            <form onSubmit={handleSubmit}>
-              <VStack spacing={4}>
-                <FormControl>
-                  <FormLabel>Full Name *</FormLabel>
-                  <Input name="name" value={formData.name} onChange={handleInputChange} placeholder="Enter your full name" />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Email *</FormLabel>
-                  <Input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="you@example.com" />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Mobile Number *</FormLabel>
-                  <Input type="tel" name="mobile" value={formData.mobile} onChange={handleInputChange} placeholder="Enter 10-digit mobile number" />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Equipment Type *</FormLabel>
-                  <Select name="equipmentType" value={formData.equipmentType} onChange={handleInputChange}>
+          {/* Form */}
+          <div className={scss["jcb-rent-section__form-container"]}>
+            <div className={scss["jcb-rent-section__form-card"]}>
+              <div className={scss["jcb-rent-section__form-header"]}>
+                <h3>Book Your Equipment</h3>
+                <p>Fill the form below to reserve your equipment.</p>
+              </div>
+              <form onSubmit={handleSubmit}>
+                <div className={scss["jcb-rent-section__form-group"]}>
+                  <label>Full Name *</label>
+                  <input name="name" value={formData.name} onChange={handleInputChange} placeholder="Enter your full name" />
+                </div>
+                <div className={scss["jcb-rent-section__form-group"]}>
+                  <label>Email *</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="you@example.com" />
+                </div>
+                <div className={scss["jcb-rent-section__form-group"]}>
+                  <label>Mobile Number *</label>
+                  <input type="tel" name="mobile" value={formData.mobile} onChange={handleInputChange} placeholder="Enter 10-digit mobile number" />
+                </div>
+                <div className={scss["jcb-rent-section__form-group"]}>
+                  <label>Equipment Type *</label>
+                  <select name="equipmentType" value={formData.equipmentType} onChange={handleInputChange}>
                     <option value="JCB">JCB Equipment</option>
                     <option value="Breaker">Breaker Equipment</option>
-                  </Select>
-                </FormControl>
-                <FormControl>
-                  <FormLabel>State *</FormLabel>
-                  <Select name="state" value={formData.state} onChange={handleInputChange}>
+                  </select>
+                </div>
+                <div className={scss["jcb-rent-section__form-group"]}>
+                  <label>State *</label>
+                  <select name="state" value={formData.state} onChange={handleInputChange}>
                     <option value="">Select State</option>
                     {indianStates.map((s) => <option key={s} value={s}>{s}</option>)}
-                  </Select>
-                </FormControl>
-                <FormControl>
-                  <FormLabel>District *</FormLabel>
-                  <Input name="district" value={formData.district} onChange={handleInputChange} placeholder="Enter district" />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Village/City *</FormLabel>
-                  <Input name="village" value={formData.village} onChange={handleInputChange} placeholder="Enter village or city" />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Rental Duration *</FormLabel>
-                  <Select name="rentTime" value={formData.rentTime} onChange={handleInputChange}>
+                  </select>
+                </div>
+                <div className={scss["jcb-rent-section__form-group"]}>
+                  <label>District *</label>
+                  <input name="district" value={formData.district} onChange={handleInputChange} placeholder="Enter district" />
+                </div>
+                <div className={scss["jcb-rent-section__form-group"]}>
+                  <label>Village/City *</label>
+                  <input name="village" value={formData.village} onChange={handleInputChange} placeholder="Enter village or city" />
+                </div>
+                <div className={scss["jcb-rent-section__form-group"]}>
+                  <label>Rental Duration *</label>
+                  <select name="rentTime" value={formData.rentTime} onChange={handleInputChange}>
                     <option value="">Select rental duration</option>
-                    {(formData.equipmentType === "JCB" ? rentTimeOptions : breakerRentOptions).map((o) => (
+                    {rentTimeOptions.map((o) => (
                       <option key={o.value} value={o.value}>{o.label} - ₹{formatCurrency(o.rate)}</option>
                     ))}
-                  </Select>
-                </FormControl>
+                  </select>
+                </div>
 
                 {formData.rentTime && (
-                  <HStack w="full" justify="space-between">
-                    <Text fontWeight="bold">Total Rate:</Text>
-                    <HStack>
+                  <div className={scss["jcb-rent-section__rate"]}>
+                    <span>Total Rate:</span>
+                    <div>
                       <IndianRupee />
-                      <Text>{formatCurrency(calculateRate())}</Text>
-                    </HStack>
-                  </HStack>
+                      {formatCurrency(calculateRate())}
+                    </div>
+                  </div>
                 )}
 
-                <Button type="submit" colorScheme="orange" w="full" leftIcon={<Calendar />} isLoading={submitting}>
-                  Book Now
-                </Button>
-              </VStack>
-            </form>
-          </Box>
-        </HStack>
-      </VStack>
-    </Box>
+                <button type="submit" className={scss["jcb-rent-section__submit-btn"]} disabled={submitting}>
+                  <Calendar /> Book Now
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 
