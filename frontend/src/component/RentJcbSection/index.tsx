@@ -124,7 +124,7 @@ const JCBRentSection = () => {
   const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + jcbImages.length) % jcbImages.length);
 
   return (
-    <section className={scss["jcb-rent-section"]}>
+    <section id="rentjcb" className={scss["jcb-rent-section"]}>
       <div className={scss["jcb-rent-section__container"]}>
         {/* Header */}
         <div className={scss["jcb-rent-section__header"]}>
