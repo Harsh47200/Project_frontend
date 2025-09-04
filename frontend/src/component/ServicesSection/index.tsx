@@ -1,6 +1,7 @@
 import React from "react";
 import { Truck, Settings, Wrench, Shield } from "lucide-react";
 import scss from "./ServicesSection.module.scss";
+import { CSSVariableStyle } from "@/utils/string";
 
 const ServicesSection = () => {
   const services = [
@@ -8,41 +9,41 @@ const ServicesSection = () => {
       title: "JCB Maintenance",
       description:
         "Complete maintenance and repair services for JCB machinery with genuine parts and expert technicians.",
-      icon: <Truck className={scss.services__card_icon} style={{ "--delay": "0s" }} />,
+      icon: <Truck className={scss.services__card_icon} style={{ "--delay": "0s" } as CSSVariableStyle} />,
     },
     {
       title: "Hitachi Equipment Service",
       description:
         "Professional servicing and repair of Hitachi construction equipment with specialized tools.",
-      icon: <Settings className={scss.services__card_icon} style={{ "--delay": "0.1s" }} />,
+      icon: <Settings className={scss.services__card_icon} style={{ "--delay" : "0.1s" } as CSSVariableStyle} />,
     },
     {
       title: "Hydraulic Pump & Seal Repair",
       description:
         "Expert hydraulic pump rebuilding and seal replacement services for optimal performance.",
-      icon: <Wrench className={scss.services__card_icon} style={{ "--delay": "0.2s" }} />,
+      icon: <Wrench className={scss.services__card_icon} style={{ "--delay": "0.2s" } as CSSVariableStyle} />,
     },
     {
       title: "Welding Works",
       description:
         "All types of welding including hardbasing design welding for heavy machinery components.",
-      icon: <Shield className={scss.services__card_icon} style={{ "--delay": "0.3s" }} />,
+      icon: <Shield className={scss.services__card_icon} style={{ "--delay": "0.3s" } as CSSVariableStyle} />,
     },
   ];
 
   const additional = [
     {
-      icon: <Truck className={scss.services__additional_icon} style={{ "--delay": "0.1s" }} />,
+      icon: <Truck className={scss.services__additional_icon} style={{ "--delay": "0.1s" } as CSSVariableStyle} />,
       title: "On-Site Service",
       desc: "We come to your location for repairs and maintenance.",
     },
     {
-      icon: <Settings className={scss.services__additional_icon} style={{ "--delay": "0.2s" }} />,
+      icon: <Settings className={scss.services__additional_icon} style={{ "--delay": "0.2s" } as CSSVariableStyle} />,
       title: "Hardbasing Design Welding",
       desc: "Specialized welding for heavy-duty welding road use.",
     },
     {
-      icon: <Shield className={scss.services__additional_icon} style={{ "--delay": "0.3s" }} />,
+      icon: <Shield className={scss.services__additional_icon} style={{ "--delay": "0.3s" } as CSSVariableStyle} />,
       title: "Genuine Parts",
       desc: "Quality parts for lasting repairs and performance.",
     },

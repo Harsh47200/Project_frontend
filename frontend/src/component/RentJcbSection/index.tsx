@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  Star,
-  Calendar,
-  IndianRupee,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import scss from "./RentJcbSection.module.scss";
+import { Star, Calendar, IndianRupee, ChevronLeft, ChevronRight } from "lucide-react";
+import { Box, Image, Button, Input, Select, Text, VStack, HStack, FormControl, FormLabel } from "@chakra-ui/react";
 import Swal from "sweetalert2";
-import { Image } from "@chakra-ui/react";
 
-// Define proper types
+// Define types
 interface FormData {
   name: string;
   email: string;
@@ -43,9 +35,6 @@ const JCBRentSection = () => {
     equipmentType: "JCB",
   });
 
-  const formatCurrency = (value: number) =>
-    new Intl.NumberFormat("en-IN").format(value);
-
   const jcbImages = [
     "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1600&h=900&fit=crop",
     "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1600&h=900&fit=crop",
@@ -73,34 +62,11 @@ const JCBRentSection = () => {
   ];
 
   const indianStates = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa",
+    "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala",
+    "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland",
+    "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
+    "Uttar Pradesh", "Uttarakhand", "West Bengal"
   ];
 
   useEffect(() => {
@@ -110,67 +76,29 @@ const JCBRentSection = () => {
     return () => clearInterval(interval);
   }, [jcbImages.length]);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const formatCurrency = (value: number) => new Intl.NumberFormat("en-IN").format(value);
+
   const calculateRate = () => {
-    const options =
-      formData.equipmentType === "JCB" ? rentTimeOptions : breakerRentOptions;
-    const selected = options.find(
-      (option) => option.value === formData.rentTime
-    );
+    const options = formData.equipmentType === "JCB" ? rentTimeOptions : breakerRentOptions;
+    const selected = options.find((option) => option.value === formData.rentTime);
     return selected ? selected.rate : 0;
   };
 
   const validate = () => {
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.mobile ||
-      !formData.state ||
-      !formData.district ||
-      !formData.village ||
-      !formData.rentTime
-    ) {
-      Swal.fire({
-        title: "Missing fields",
-        text: "Please fill all fields",
-        icon: "warning",
-        confirmButtonText: "OK",
-        timer: 1800,
-        backdrop: false,
-        showClass: { popup: "animate__animated animate__fadeInDown" },
-        hideClass: { popup: "animate__animated animate__fadeOutUp" },
-      });
+    if (!formData.name || !formData.email || !formData.mobile || !formData.state || !formData.district || !formData.village || !formData.rentTime) {
+      Swal.fire("Missing fields", "Please fill all fields", "warning");
       return false;
     }
-    const mobileOk = /^[6-9]\d{9}$/.test(formData.mobile);
-    if (!mobileOk) {
-      Swal.fire({
-        title: "Invalid Mobile Number",
-        text: "Please enter a valid 10-digit Indian mobile number",
-        icon: "error",
-        confirmButtonText: "OK",
-        backdrop: true,
-        showClass: { popup: "animate__animated animate__shakeX" },
-        hideClass: { popup: "animate__animated animate__fadeOutUp" },
-      });
+    if (!/^[6-9]\d{9}$/.test(formData.mobile)) {
+      Swal.fire("Invalid Mobile Number", "Please enter a valid 10-digit Indian mobile number", "error");
       return false;
     }
-    const emailOk = /^[A-Za-z0-9+_.-]+@(.+)$/.test(formData.email);
-    if (!emailOk) {
-      Swal.fire({
-        title: "Invalid Email",
-        text: "Please enter a valid email address",
-        icon: "warning",
-        confirmButtonText: "OK",
-        backdrop: true,
-        showClass: { popup: "animate__animated animate__fadeInDown" },
-        hideClass: { popup: "animate__animated animate__fadeOutUp" },
-      });
+    if (!/^[A-Za-z0-9+_.-]+@(.+)$/.test(formData.email)) {
+      Swal.fire("Invalid Email", "Please enter a valid email address", "warning");
       return false;
     }
     return true;
@@ -179,324 +107,147 @@ const JCBRentSection = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-
     setSubmitting(true);
+
     try {
       const payload = { ...formData, rate: calculateRate() };
-
-      const response = await fetch(
-        "http://localhost:8080/api/contact/rent-request",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
-
+      const response = await fetch("http://localhost:8080/api/contact/rent-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       const data = await response.json();
-      if (response.ok && data.status === "success") {
-        Swal.fire({
-          title: "✅ Request Submitted!",
-          text:
-            data.message ||
-            "Your request has been submitted successfully! We'll contact you immediately.",
-          icon: "success",
-          confirmButtonText: "OK",
-          showClass: {
-            popup: "animate__animated animate__fadeInDown",
-          },
-          hideClass: {
-            popup: "animate__animated animate__fadeOutUp",
-          },
-        });
 
+      if (response.ok && data.status === "success") {
+        Swal.fire("✅ Request Submitted!", data.message || "Your request has been submitted successfully!", "success");
         setFormData({
-          name: "",
-          email: "",
-          mobile: "",
-          state: "",
-          district: "",
-          village: "",
-          rentTime: "",
-          equipmentType: "JCB",
+          name: "", email: "", mobile: "", state: "", district: "", village: "", rentTime: "", equipmentType: "JCB",
         });
       } else {
-        Swal.fire({
-          title: "Submission Failed",
-          text: data.message || "Failed to submit request. Please try again.",
-          icon: "error",
-          confirmButtonText: "OK",
-          backdrop: true,
-          showClass: {
-            popup: "animate__animated animate__fadeInDown",
-          },
-          hideClass: {
-            popup: "animate__animated animate__fadeOutUp",
-          },
-        });
+        Swal.fire("Submission Failed", data.message || "Failed to submit request.", "error");
       }
     } catch (error) {
-      console.error("Submission error:", error);
-      Swal.fire({
-        title: "Failed!",
-        text: "Failed to submit request. Please try again.",
-        icon: "error",
-        confirmButtonText: "OK",
-        backdrop: true,
-        showClass: {
-          popup: "animate__animated animate__fadeInDown",
-        },
-        hideClass: {
-          popup: "animate__animated animate__fadeOutUp",
-        },
-      });
+      console.error(error);
+      Swal.fire("Failed!", "Failed to submit request. Please try again.", "error");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const nextImage = () =>
-    setCurrentImageIndex((prev) => (prev + 1) % jcbImages.length);
-  const prevImage = () =>
-    setCurrentImageIndex(
-      (prev) => (prev - 1 + jcbImages.length) % jcbImages.length
-    );
+  const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % jcbImages.length);
+  const prevImage = () => setCurrentImageIndex((prev) => (prev - 1 + jcbImages.length) % jcbImages.length);
 
   return (
-    <section id="rentjcb" className={scss["jcb-rent-section"]}>
-      <div className={scss["jcb-rent-section__container"]}>
+    <Box as="section" p={8} bg="gray.50">
+      <VStack spacing={6}>
         {/* Header */}
-        <motion.div
-          className={scss["jcb-rent-section__header"]}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          <h2 className={scss["jcb-rent-section__title"]}>
-            JCB & Equipment Rental Services
-          </h2>
-          <p className={scss["jcb-rent-section__subtitle"]}>
-            Premium heavy machinery rental with professional operators. <br />
-            Construction, excavation & industrial projects made easy.
-          </p>
-        </motion.div>
+        <Box textAlign="center">
+          <Text fontSize="3xl" fontWeight="bold">JCB & Equipment Rental Services</Text>
+          <Text>Premium heavy machinery rental with professional operators. Construction, excavation & industrial projects made easy.</Text>
+        </Box>
 
-        <div className={scss["jcb-rent-section__content-grid"]}>
+        {/* Gallery + Form */}
+        <HStack align="start" spacing={10} w="full" flexWrap="wrap">
           {/* Image Gallery */}
-          <motion.div
-            className={scss["jcb-rent-section__gallery"]}
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1 }}
-          >
-            <div className={scss["jcb-rent-section__main-image-container"]}>
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={currentImageIndex}
-                  src={jcbImages[currentImageIndex]}
-                  alt={`JCB Equipment ${currentImageIndex + 1}`}
-                  className={scss["jcb-rent-section__main-image"]}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 1.2 }}
+          <Box flex="1" maxW="600px">
+            <Box position="relative">
+              <Image alt="" src={jcbImages[currentImageIndex]} borderRadius="md" w="full" h="400px" objectFit="cover" />
+              <Box position="absolute" top="2" left="2" bg="green.500" color="white" px={2} py={1} borderRadius="md">Available Now</Box>
+              <HStack position="absolute" bottom="2" right="2" bg="whiteAlpha.800" borderRadius="md">
+                <Star size={20} fill="gold" />
+                <Text fontWeight="bold">4.8</Text>
+              </HStack>
+              <Button position="absolute" left="2" top="50%" transform="translateY(-50%)" onClick={prevImage} size="sm"><ChevronLeft /></Button>
+              <Button position="absolute" right="2" top="50%" transform="translateY(-50%)" onClick={nextImage} size="sm"><ChevronRight /></Button>
+            </Box>
+
+            <HStack mt={2} spacing={2} overflowX="auto">
+              {jcbImages.map((img, idx) => (
+                <Image
+                  alt=""
+                  key={idx}
+                  src={img}
+                  w="20"
+                  h="20"
+                  objectFit="cover"
+                  border={currentImageIndex === idx ? "2px solid" : "none"}
+                  borderColor="orange.400"
+                  borderRadius="md"
+                  cursor="pointer"
+                  onClick={() => setCurrentImageIndex(idx)}
                 />
-              </AnimatePresence>
-              <div className={scss["jcb-rent-section__image-overlay"]}>
-                <div className={scss["jcb-rent-section__overlay-content"]}>
-                  <div>
-                    <span
-                      className={scss["jcb-rent-section__availability-badge"]}
-                    >
-                      Available Now
-                    </span>
-                    <h3 className={scss["jcb-rent-section__equipment-title"]}>
-                      {formData.equipmentType} Equipment
-                    </h3>
-                  </div>
-                  <div className={scss["jcb-rent-section__rating"]}>
-                    <Star size={20} fill="currentColor" />
-                    <span>4.8</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Arrows */}
-              <button
-                className={`${scss["jcb-rent-section__nav-arrow"]} ${scss["jcb-rent-section__nav-arrow--left"]}`}
-                onClick={prevImage}
-                aria-label="Previous image"
-              >
-                <ChevronLeft size={24} />
-              </button>
-              <button
-                className={`${scss["jcb-rent-section__nav-arrow"]} ${scss["jcb-rent-section__nav-arrow--right"]}`}
-                onClick={nextImage}
-                aria-label="Next image"
-              >
-                <ChevronRight size={24} />
-              </button>
-            </div>
-
-            {/* Thumbnails */}
-            <div className={scss["jcb-rent-section__thumbnails"]}>
-              {jcbImages.map((image, index) => (
-                <div
-                  key={index}
-                  className={`${scss["jcb-rent-section__thumbnail"]} ${
-                    currentImageIndex === index ? scss["active"] : ""
-                  }`}
-                  onClick={() => setCurrentImageIndex(index)}
-                >
-                  <Image src={image} alt={`Thumbnail ${index + 1}`} />
-                </div>
               ))}
-            </div>
-          </motion.div>
+            </HStack>
+          </Box>
 
           {/* Rental Form */}
-          <motion.div
-            className={scss["jcb-rent-section__form-container"]}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1 }}
-          >
-            <div className={scss["jcb-rent-section__form-card"]}>
-              <div className={scss["jcb-rent-section__form-header"]}>
-                <h3>Book Your Equipment</h3>
-                <p>Fill the form to get instant quote</p>
-              </div>
-              <form
-                className={scss["jcb-rent-section__form"]}
-                onSubmit={handleSubmit}
-              >
-                <div className={scss["jcb-rent-section__form-group"]}>
-                  <label>Full Name *</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="Enter your full name"
-                  />
-                </div>
-
-                <div className={scss["jcb-rent-section__form-group"]}>
-                  <label>Email *</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="you@example.com"
-                  />
-                </div>
-
-                <div className={scss["jcb-rent-section__form-group"]}>
-                  <label>Mobile Number *</label>
-                  <input
-                    type="tel"
-                    name="mobile"
-                    value={formData.mobile}
-                    onChange={handleInputChange}
-                    placeholder="Enter 10-digit mobile number"
-                  />
-                </div>
-
-                <div className={scss["jcb-rent-section__form-group"]}>
-                  <label>Equipment Type *</label>
-                  <select
-                    name="equipmentType"
-                    value={formData.equipmentType}
-                    onChange={handleInputChange}
-                  >
+          <Box flex="1" maxW="400px" bg="white" p={6} borderRadius="md" boxShadow="md">
+            <Text fontSize="xl" fontWeight="bold" mb={4}>Book Your Equipment</Text>
+            <form onSubmit={handleSubmit}>
+              <VStack spacing={4}>
+                <FormControl>
+                  <FormLabel>Full Name *</FormLabel>
+                  <Input name="name" value={formData.name} onChange={handleInputChange} placeholder="Enter your full name" />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Email *</FormLabel>
+                  <Input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="you@example.com" />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Mobile Number *</FormLabel>
+                  <Input type="tel" name="mobile" value={formData.mobile} onChange={handleInputChange} placeholder="Enter 10-digit mobile number" />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Equipment Type *</FormLabel>
+                  <Select name="equipmentType" value={formData.equipmentType} onChange={handleInputChange}>
                     <option value="JCB">JCB Equipment</option>
                     <option value="Breaker">Breaker Equipment</option>
-                  </select>
-                </div>
-
-                <div className={scss["jcb-rent-section__form-row"]}>
-                  <div className={scss["jcb-rent-section__form-group"]}>
-                    <label>State *</label>
-                    <select
-                      name="state"
-                      value={formData.state}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">Select State</option>
-                      {indianStates.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className={scss["jcb-rent-section__form-group"]}>
-                    <label>District *</label>
-                    <input
-                      type="text"
-                      name="district"
-                      value={formData.district}
-                      onChange={handleInputChange}
-                      placeholder="Enter district"
-                    />
-                  </div>
-                </div>
-
-                <div className={scss["jcb-rent-section__form-group"]}>
-                  <label>Village/City *</label>
-                  <input
-                    type="text"
-                    name="village"
-                    value={formData.village}
-                    onChange={handleInputChange}
-                    placeholder="Enter village or city name"
-                  />
-                </div>
-
-                <div className={scss["jcb-rent-section__form-group"]}>
-                  <label>Rental Duration *</label>
-                  <select
-                    name="rentTime"
-                    value={formData.rentTime}
-                    onChange={handleInputChange}
-                  >
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>State *</FormLabel>
+                  <Select name="state" value={formData.state} onChange={handleInputChange}>
+                    <option value="">Select State</option>
+                    {indianStates.map((s) => <option key={s} value={s}>{s}</option>)}
+                  </Select>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>District *</FormLabel>
+                  <Input name="district" value={formData.district} onChange={handleInputChange} placeholder="Enter district" />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Village/City *</FormLabel>
+                  <Input name="village" value={formData.village} onChange={handleInputChange} placeholder="Enter village or city" />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Rental Duration *</FormLabel>
+                  <Select name="rentTime" value={formData.rentTime} onChange={handleInputChange}>
                     <option value="">Select rental duration</option>
-                    {(formData.equipmentType === "JCB"
-                      ? rentTimeOptions
-                      : breakerRentOptions
-                    ).map((o) => (
-                      <option key={o.value} value={o.value}>
-                        {o.label} - ₹{formatCurrency(o.rate)}
-                      </option>
+                    {(formData.equipmentType === "JCB" ? rentTimeOptions : breakerRentOptions).map((o) => (
+                      <option key={o.value} value={o.value}>{o.label} - ₹{formatCurrency(o.rate)}</option>
                     ))}
-                  </select>
-                </div>
+                  </Select>
+                </FormControl>
 
                 {formData.rentTime && (
-                  <div className={scss["jcb-rent-section__rate"]}>
-                    <span>Total Rate:</span>
-                    <div>
-                      <IndianRupee size={20} />
-                      <span>{formatCurrency(calculateRate())}</span>
-                    </div>
-                  </div>
+                  <HStack w="full" justify="space-between">
+                    <Text fontWeight="bold">Total Rate:</Text>
+                    <HStack>
+                      <IndianRupee />
+                      <Text>{formatCurrency(calculateRate())}</Text>
+                    </HStack>
+                  </HStack>
                 )}
 
-                <button
-                  type="submit"
-                  className={scss["jcb-rent-section__submit-btn"]}
-                  disabled={submitting}
-                >
-                  <Calendar size={20} />{" "}
-                  {submitting ? "Submitting..." : "Book Now"}
-                </button>
-              </form>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
+                <Button type="submit" colorScheme="orange" w="full" leftIcon={<Calendar />} isLoading={submitting}>
+                  Book Now
+                </Button>
+              </VStack>
+            </form>
+          </Box>
+        </HStack>
+      </VStack>
+    </Box>
   );
 };
 

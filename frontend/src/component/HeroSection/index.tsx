@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Phone } from "lucide-react";
 import { FaWhatsappSquare } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import { Box, Heading, Text, UnorderedList, ListItem, Button, Image } from "@chakra-ui/react";
 import scss from "./HeroSection.module.scss";
 
 const HeroSection = () => {
@@ -17,7 +17,7 @@ const HeroSection = () => {
         "Engine service includes draining old oil, replacing with new oil, and changing filters.",
         "We stock multiple filters: engine oil, diesel, stainer, hydraulic oil, and transmission filters.",
         "Available oils: hydraulic oil, transmission oil, excel oil.",
-        "We handle oil changes for transmission, differential, hydraulic, and engine oil systems."
+        "We handle oil changes for transmission, differential, hydraulic, and engine oil systems.",
       ],
       image: "/images/slider2.webp",
       bgColor: "from-yellow-500 to-orange-600",
@@ -25,14 +25,18 @@ const HeroSection = () => {
     {
       title: "Hitachi Equipment Specialists",
       subtitle: "Authorized service center for Hitachi machinery",
-      description: ["Expert diagnostics, component replacement, and performance optimization."],
+      description: [
+        "Expert diagnostics, component replacement, and performance optimization.",
+      ],
       image: "/images/slider1.jpg",
       bgColor: "from-yellow-500 to-blue-700",
     },
     {
       title: "Hydraulic Pump & Seal Repair",
       subtitle: "Precision hydraulic system solutions",
-      description: ["Complete pump rebuilding, seal replacement, and system testing."],
+      description: [
+        "Complete pump rebuilding, seal replacement, and system testing.",
+      ],
       image: "/images/Hydraulicpump.webp",
       bgColor: "from-green-500 to-teal-600",
     },
@@ -52,8 +56,10 @@ const HeroSection = () => {
     return () => clearInterval(timer);
   }, [heroSlides.length]);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  const nextSlide = () =>
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  const prevSlide = () =>
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
 
   const whatsappNumber = "919913972701";
   const emergencyNumber = "9913972701";
@@ -61,103 +67,75 @@ const HeroSection = () => {
   return (
     <section id="home" className={scss.hero}>
       <div className={scss.hero__container}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentSlide}
-            className={scss.hero__slide}
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+        <div className={scss.hero__slide}>
+          <div
+            className={`${scss.hero__background} bg-gradient-to-br ${heroSlides[currentSlide].bgColor}`}
           >
-            <div className={`${scss.hero__background} bg-gradient-to-br ${heroSlides[currentSlide].bgColor}`}>
-              <div className={scss.hero__overlay}></div>
+            <div className={scss.hero__overlay}></div>
 
-              {/* Fixed Image Handling */}
-              <motion.img
-                src={heroSlides[currentSlide].image}
-                alt={heroSlides[currentSlide].title}
-                className={scss.hero__image}
-                initial={{ scale: 1.2 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 6, ease: "easeOut" }}
-              />
+            {/* Slide Image */}
+            <Image 
+              src={heroSlides[currentSlide].image}
+              alt={heroSlides[currentSlide].title}
+              className={scss.hero__image}
+            />
 
-              {/* Slide Content */}
-              <div className={scss.hero__content}>
-                <div className={scss.hero__text}>
-                  <motion.h2
-                    className={scss.hero__title}
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
+            {/* Slide Content */}
+            <div className={scss.hero__content}>
+              <div className={scss.hero__text}>
+                <Heading className={scss.hero__title}>
+                  {heroSlides[currentSlide].title}
+                </Heading>
+
+                <Text className={scss.hero__subtitle}>
+                  {heroSlides[currentSlide].subtitle}
+                </Text>
+
+                <UnorderedList className={scss.hero__description}>
+                  {heroSlides[currentSlide].description.map((point, idx) => (
+                    <ListItem key={idx}>{point}</ListItem>
+                  ))}
+                </UnorderedList>
+
+                <Box className={scss.hero__buttons}>
+                  <Button
+                    onClick={() =>
+                      window.open(
+                        `https://wa.me/${whatsappNumber}?text=Hello, I need service help!`,
+                        "_blank"
+                      )
+                    }
+                    className={`${scss.hero__btn} ${scss.hero__btn__primary} flex items-center gap-2`}
                   >
-                    {heroSlides[currentSlide].title}
-                  </motion.h2>
+                    <FaWhatsappSquare className="text-green-500 w-5 h-5" />
+                    WhatsApp
+                  </Button>
 
-                  <motion.p
-                    className={scss.hero__subtitle}
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
+                  <Button
+                    onClick={() => (window.location.href = `tel:${emergencyNumber}`)}
+                    className={`${scss.hero__btn} ${scss.hero__btn__secondary} flex items-center gap-2`}
                   >
-                    {heroSlides[currentSlide].subtitle}
-                  </motion.p>
-
-                  <motion.ul
-                    className={scss.hero__description}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.6 }}
-                  >
-                    {heroSlides[currentSlide].description.map((point, idx) => (
-                      <motion.li
-                        key={idx}
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.7 + idx * 0.15 }}
-                      >
-                        {point}
-                      </motion.li>
-                    ))}
-                  </motion.ul>
-
-                  <motion.div
-                    className={scss.hero__buttons}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 1 }}
-                  >
-                    <button
-                      onClick={() =>
-                        window.open(`https://wa.me/${whatsappNumber}?text=Hello, I need service help!`, "_blank")
-                      }
-                      className={`${scss.hero__btn} ${scss.hero__btn__primary} flex items-center gap-2`}
-                    >
-                      <FaWhatsappSquare className="text-green-500 w-5 h-5" />
-                      WhatsApp
-                    </button>
-
-                    <button
-                      onClick={() => (window.location.href = `tel:${emergencyNumber}`)}
-                      className={`${scss.hero__btn} ${scss.hero__btn__secondary} flex items-center gap-2`}
-                    >
-                      <Phone className="w-5 h-5 text-red-500" />
-                      Call for Emergency
-                    </button>
-                  </motion.div>
-                </div>
+                    <Phone className="w-5 h-5 text-red-500" />
+                    Call for Emergency
+                  </Button>
+                </Box>
               </div>
             </div>
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        </div>
       </div>
 
       {/* Navigation Arrows */}
-      <button onClick={prevSlide} className={`${scss.hero__nav} ${scss.hero__nav__prev}`}>
+      <button
+        onClick={prevSlide}
+        className={`${scss.hero__nav} ${scss.hero__nav__prev}`}
+      >
         <ChevronLeft className={scss.hero__nav_icon} />
       </button>
-      <button onClick={nextSlide} className={`${scss.hero__nav} ${scss.hero__nav__next}`}>
+      <button
+        onClick={nextSlide}
+        className={`${scss.hero__nav} ${scss.hero__nav__next}`}
+      >
         <ChevronRight className={scss.hero__nav_icon} />
       </button>
 
@@ -167,7 +145,9 @@ const HeroSection = () => {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`${scss.hero__indicator} ${index === currentSlide ? scss.hero__indicator__active : ""}`}
+            className={`${scss.hero__indicator} ${
+              index === currentSlide ? scss.hero__indicator__active : ""
+            }`}
           />
         ))}
       </div>
