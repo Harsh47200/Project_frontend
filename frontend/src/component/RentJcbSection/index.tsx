@@ -92,42 +92,6 @@ const JCBRentSection = () => {
     return true;
   };
 
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (!validate()) return;
-  //   setSubmitting(true);
-
-  //   try {
-  //     const payload = { ...formData, rate: calculateRate() };
-  //     // const response = await fetch("http://localhost:8080/api/contact/rent-request", {
-  //     //   method: "POST",
-  //     //   headers: { "Content-Type": "application/json" },
-  //     //   body: JSON.stringify(payload),
-  //     // });
-  //     const response = await fetch(`/api/contact/rent-request`, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(payload),
-  //     });
-  //     const data = await response.json();
-
-  //     if (response.ok && data.status === "success") {
-  //       Swal.fire("✅ Request Submitted!", data.message || "Your request has been submitted successfully!", "success");
-  //       setFormData({
-  //         name: "", email: "", mobile: "", state: "", district: "", village: "", rentTime: "", equipmentType: "JCB",
-  //       });
-  //     } else {
-  //       Swal.fire("Submission Failed", data.message || "Failed to submit request.", "error");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     Swal.fire("Failed!", "Failed to submit request. Please try again.", "error");
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
@@ -135,42 +99,25 @@ const JCBRentSection = () => {
 
     try {
       const payload = { ...formData, rate: calculateRate() };
+      // const response = await fetch("http://localhost:8080/api/contact/rent-request", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload),
+      // });
       const response = await fetch(`/api/contact/rent-request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      const data = await response.json();
 
-      const text = await response.text(); // pehle text me read karo
-      let data = {};
-      try {
-        data = text ? JSON.parse(text) : {};
-      } catch (err) {
-        console.warn("Response is not valid JSON:", text);
-      }
-
-      if (response.ok && (data as any).status === "success") {
-        Swal.fire(
-          "✅ Request Submitted!",
-          (data as any).message || "Your request has been submitted successfully!",
-          "success"
-        );
+      if (response.ok && data.status === "success") {
+        Swal.fire("✅ Request Submitted!", data.message || "Your request has been submitted successfully!", "success");
         setFormData({
-          name: "",
-          email: "",
-          mobile: "",
-          state: "",
-          district: "",
-          village: "",
-          rentTime: "",
-          equipmentType: "JCB",
+          name: "", email: "", mobile: "", state: "", district: "", village: "", rentTime: "", equipmentType: "JCB",
         });
       } else {
-        Swal.fire(
-          "Submission Failed",
-          (data as any).message || `Failed to submit request. Status code: ${response.status}`,
-          "error"
-        );
+        Swal.fire("Submission Failed", data.message || "Failed to submit request.", "error");
       }
     } catch (error) {
       console.error(error);
