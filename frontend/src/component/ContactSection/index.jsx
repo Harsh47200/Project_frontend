@@ -13,7 +13,7 @@ const ContactSection = () => {
     phoneNumber: '',
     details: ''
   });
-const API_URL = "http://myjavaapp-env.eba-gia9yifj.eu-north-1.elasticbeanstalk.com/";
+const API_URL = "http://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/";
   const handleRequestService = async () => {
     setIsLoading(prev => ({ ...prev, sms: true }));
     setMessages(prev => ({ ...prev, sms: "" }));
