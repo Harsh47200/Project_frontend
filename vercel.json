@@ -2,15 +2,15 @@
   "rewrites": [
     {
       "source": "/api/contact/emergency-email",
-      "destination": "http://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/api/contact/emergency-email"
+      "destination": "https://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/api/contact/emergency-email"
     },
     {
       "source": "/api/contact/rent-request",
-      "destination": "http://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/api/contact/rent-request"
+      "destination": "https://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/api/contact/rent-request"
     },
     {
       "source": "/api/contact/service-request",
-      "destination": "http://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/api/contact/service-request"
+      "destination": "https://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/api/contact/service-request"
     }
   ]
 }
