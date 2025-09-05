@@ -24,6 +24,8 @@ interface RentOption {
 const JCBRentSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -97,7 +99,12 @@ const JCBRentSection = () => {
 
     try {
       const payload = { ...formData, rate: calculateRate() };
-      const response = await fetch("http://localhost:8080/api/contact/rent-request", {
+      // const response = await fetch("http://localhost:8080/api/contact/rent-request", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(payload),
+      // });
+      const response = await fetch(`${API_URL}/api/contact/rent-request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

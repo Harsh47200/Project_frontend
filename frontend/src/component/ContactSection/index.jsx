@@ -13,13 +13,24 @@ const ContactSection = () => {
     phoneNumber: '',
     details: ''
   });
-
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const handleRequestService = async () => {
     setIsLoading(prev => ({ ...prev, sms: true }));
     setMessages(prev => ({ ...prev, sms: "" }));
 
     try {
-      const response = await fetch('http://localhost:8080/api/contact/service-request', {
+      // const response = await fetch('http://localhost:8080/api/contact/service-request', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     phoneNumber: "+917990178938", // Your target phone
+      //     message: "Service request from website user"
+      //   })
+      // });
+
+      const response = await fetch(`${API_URL}/api/contact/service-request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +95,15 @@ const ContactSection = () => {
     setIsLoading(prev => ({ ...prev, email: true }));
 
     try {
-      const response = await fetch('http://localhost:8080/api/contact/emergency-email', {
+      // const response = await fetch('http://localhost:8080/api/contact/emergency-email', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(formData)
+      // });
+
+      const response = await fetch(`${API_URL}/api/contact/emergency-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
