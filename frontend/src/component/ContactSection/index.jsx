@@ -30,7 +30,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
       //   })
       // });
 
-      const response = await fetch(`${API_URL}/api/contact/service-request`, {
+      const response = await fetch(`/api/contact/service-request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
       //   body: JSON.stringify(formData)
       // });
 
-      const response = await fetch(`${API_URL}/api/contact/emergency-email`, {
+      const response = await fetch(`/api/contact/emergency-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
