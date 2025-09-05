@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/api/emergency-email",
+      "source": "/api/contact/emergency-email",
       "destination": "http://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/api/contact/emergency-email"
     },
     {
