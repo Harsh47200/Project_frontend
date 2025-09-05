@@ -24,7 +24,7 @@ interface RentOption {
 const JCBRentSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  const API_URL = "http://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/";
+  const API_URL = "https://jcp-api-env.eba-m32tj9rb.eu-north-1.elasticbeanstalk.com/";
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
