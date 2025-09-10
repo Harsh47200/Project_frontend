@@ -13,7 +13,7 @@ const ContactSection = () => {
     phoneNumber: '',
     details: ''
   });
-const API_URL = "https://03e05b62d3a5.ngrok-free.app";
+const API_URL = "https://67b25adb260b.ngrok-free.app";
   const handleRequestService = async () => {
     setIsLoading(prev => ({ ...prev, sms: true }));
     setMessages(prev => ({ ...prev, sms: "" }));

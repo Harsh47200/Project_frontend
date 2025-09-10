@@ -24,7 +24,7 @@ interface RentOption {
 const JCBRentSection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [submitting, setSubmitting] = useState(false);
-  const API_URL = "https://03e05b62d3a5.ngrok-free.app";
+  const API_URL = "https://67b25adb260b.ngrok-free.app";
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
