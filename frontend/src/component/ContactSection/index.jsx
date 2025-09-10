@@ -13,7 +13,7 @@ const ContactSection = () => {
     phoneNumber: '',
     details: ''
   });
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_URL = "http://51.20.181.42:8080";
   const handleRequestService = async () => {
     setIsLoading(prev => ({ ...prev, sms: true }));
     setMessages(prev => ({ ...prev, sms: "" }));
